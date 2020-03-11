@@ -34,32 +34,40 @@ y_pred = regressor.predict(X_test)
 # Building the optimal model using Backward Elimination
 import statsmodels.api as sm
 
-# Adding a column [40, 1] which represents constent values
+# Adding a column [shape[0], 1] which represents constent values
 X_train = np.append(arr = np.ones((X_train.shape[0], 1)), values = X_train, axis = 1)
+X_test = np.append(arr = np.ones((X_test.shape[0], 1)), values = X_test, axis = 1)
 
 # SL(Significane Level) = 0.05, any P value > SL will be eliminated
-# The first elimination
+# The best model will have the highest adjusted R-squared value
+
+# The first elimination, adjusted R-squared = 0.943
 X_opt = X_train[:, [0,1,2,3,4,5]]
 regressor_OLS = sm.OLS(endog = y_train, exog = X_opt).fit()
 regressor_OLS.summary()
 
-# The second elimination
+# The second elimination, adjusted R-squared = 0.944
 X_opt = X_train[:, [0,1,3,4,5]]
 regressor_OLS = sm.OLS(endog = y_train, exog = X_opt).fit()
 regressor_OLS.summary()
 
-# The third elimination
+# The third elimination, adjusted R-squared = 0.946
 X_opt = X_train[:, [0,3,4,5]]
 regressor_OLS = sm.OLS(endog = y_train, exog = X_opt).fit()
 regressor_OLS.summary()
 
-# The forth elimination
+# The forth elimination, adjusted R-squared = 0.947
 X_opt = X_train[:, [0,3,5]]
 regressor_OLS = sm.OLS(endog = y_train, exog = X_opt).fit()
 regressor_OLS.summary()
 
-# The fifth elimination
+# The fifth elimination, adjusted R-squared = 0.944
 X_opt = X_train[:, [0,3]]
 regressor_OLS = sm.OLS(endog = y_train, exog = X_opt).fit()
 regressor_OLS.summary()
 
+# The best model prediction
+X_opt = X_train[:, [0,3,5]]
+regressor_OLS = sm.OLS(endog = y_train, exog = X_opt).fit()
+X_opt_test = X_test[:, [0,3,5]]
+y_pred_OLS = regressor_OLS.predict(X_opt_test)
